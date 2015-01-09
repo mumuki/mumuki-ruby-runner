@@ -1,1 +1,1 @@
-rspec_command: heroku rake spec
+rspec_command: heroku run rspec
