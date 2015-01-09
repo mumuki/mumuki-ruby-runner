@@ -7,6 +7,7 @@ verdadero = true
 EOT
 
   compiled_test_submission = <<EOT
+require 'spec'
 verdadero = true
 EOT
 
