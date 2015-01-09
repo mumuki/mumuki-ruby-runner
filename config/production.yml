@@ -1,0 +1,1 @@
+rspec_command: heroku rake spec

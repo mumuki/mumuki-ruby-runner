@@ -1,0 +1,37 @@
+GIT
+  remote: git://github.com/flbulgarelli/mumukit.git
+  revision: 9bb5bc38da46ab18dbd8f5f909bd71ba6eee312d
+  branch: master
+  specs:
+    mumukit (0.0.1)
+      sinatra (~> 1.4)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    diff-lcs (1.2.5)
+    rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
+    rake (10.4.2)
+    rspec (2.13.0)
+      rspec-core (~> 2.13.0)
+      rspec-expectations (~> 2.13.0)
+      rspec-mocks (~> 2.13.0)
+    rspec-core (2.13.1)
+    rspec-expectations (2.13.0)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-mocks (2.13.1)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    tilt (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  mumukit!
+  rake
+  rspec (= 2.13)
