@@ -4,8 +4,8 @@ class TestCompiler
   def compile(test_src, content_src)
     <<EOF
 require 'spec'
-#{test_src}
 #{content_src}
+#{test_src}
 EOF
   end
 end
