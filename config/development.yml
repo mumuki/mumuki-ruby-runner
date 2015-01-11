@@ -1,1 +1,1 @@
-swipl_command: rspec
+swipl_command: bundle exec rake spec
