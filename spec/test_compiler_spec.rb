@@ -3,23 +3,31 @@ require 'ostruct'
 
 describe TestCompiler do
   true_test = <<EOT
-verdadero = true
+describe '_true' do
+  it 'is true' do
+    expect(_true).to be true
+  end
+end
+EOT
+
+  true_submission = <<EOT
+_true  = true
 EOT
 
   compiled_test_submission = <<EOT
-require 'spec'
-verdadero = true
+_true  = true
+
+describe '_true' do
+  it 'is true' do
+    expect(_true).to be true
+  end
+end
+
 EOT
 
   describe '#compile' do
     let(:compiler) { TestCompiler.new(nil) }
-    it { expect(compiler.compile(true_test, '')).to eq(compiled_test_submission) }
+    it { expect(compiler.compile(true_test, true_submission)).to eq(compiled_test_submission) }
   end
 
-  describe '#create_compilation_file!' do
-    let(:compiler) { TestCompiler.new(nil) }
-    let(:file) { compiler.create_compilation_file!('bar.', 'foo.') }
-
-    it { expect(File.exists? file.path).to be true }
-  end
 end
