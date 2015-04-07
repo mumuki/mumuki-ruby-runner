@@ -15,6 +15,7 @@ _true  = true
 EOT
 
   compiled_test_submission = <<EOT
+_false = false
 _true  = true
 
 describe '_true' do
@@ -27,7 +28,7 @@ EOT
 
   describe '#compile' do
     let(:compiler) { TestCompiler.new(nil) }
-    it { expect(compiler.compile(true_test, true_submission)).to eq(compiled_test_submission) }
+    it { expect(compiler.compile(true_test, '_false = false', true_submission)).to eq(compiled_test_submission) }
   end
 
 end
