@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/flbulgarelli/mumukit.git
-  revision: 9bb5bc38da46ab18dbd8f5f909bd71ba6eee312d
+  revision: 69daaa510d19d7b875443b79f958a6bff9215b77
   branch: master
   specs:
     mumukit (0.0.1)
@@ -22,11 +22,11 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
-    sinatra (1.4.5)
+    sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
-      tilt (~> 1.3, >= 1.3.4)
-    tilt (1.4.1)
+      tilt (>= 1.3, < 3)
+    tilt (2.0.1)
 
 PLATFORMS
   ruby
