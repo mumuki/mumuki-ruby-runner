@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/flbulgarelli/mumukit.git
-  revision: 69daaa510d19d7b875443b79f958a6bff9215b77
+  remote: git://github.com/uqbar-project/mumukit.git
+  revision: 459dc99fa1856b7a4da2890a747b813e415cb34f
   branch: master
   specs:
     mumukit (0.0.1)
