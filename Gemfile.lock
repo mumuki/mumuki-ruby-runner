@@ -1,9 +1,9 @@
 GIT
-  remote: git://github.com/flbulgarelli/mumukit.git
-  revision: 69daaa510d19d7b875443b79f958a6bff9215b77
-  branch: master
+  remote: git://github.com/uqbar-project/mumukit.git
+  revision: 716c512b2b8c44a3ca207891f2f427bd5bf5f076
+  tag: v0.0.2
   specs:
-    mumukit (0.0.1)
+    mumukit (0.0.2)
       sinatra (~> 1.4)
 
 GEM
