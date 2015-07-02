@@ -5,5 +5,5 @@ gem 'mumukit', github: 'uqbar-project/mumukit', tag: 'v0.2.0'
 gem 'rspec', '2.13'
 
 group :test do
-  gem 'mumukit-bridge', github: 'uqbar-project/mumukit-bridge', branch: 'master'
+  gem 'mumukit-bridge', github: 'mumuki/mumukit-bridge', tag: 'v0.1.0'
 end

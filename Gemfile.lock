@@ -1,9 +1,9 @@
 GIT
-  remote: git://github.com/uqbar-project/mumukit-bridge.git
-  revision: a756c16adb3d4d863886aa1f3e05f5860499d2f4
-  branch: master
+  remote: git://github.com/mumuki/mumukit-bridge.git
+  revision: 5a73b8aff6e4417663c938e5cdfb0017f9954571
+  tag: v0.1.0
   specs:
-    mumukit-bridge (0.0.1)
+    mumukit-bridge (0.1.0)
       rest-client
 
 GIT
@@ -22,7 +22,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    mime-types (2.5)
+    mime-types (2.6.1)
     netrc (0.10.3)
     rack (1.6.0)
     rack-protection (1.5.3)
