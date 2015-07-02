@@ -2,9 +2,9 @@ require_relative './spec_helper'
 
 describe TestRunner do
   let(:runner) { TestRunner.new('rspec_command' => 'rspec') }
-  let(:file) { File.new('spec/data/sample_spec.rb') }
-  let(:file_multi) { File.new('spec/data/sample_multi_spec.rb') }
-  let(:file_failed) { File.new('spec/data/sample_failed_spec.rb') }
+  let(:file) { File.new('spec/data/sample.rb') }
+  let(:file_multi) { File.new('spec/data/sample_multi.rb') }
+  let(:file_failed) { File.new('spec/data/sample_failed.rb') }
 
   describe '#run_test_command' do
     it { expect(runner.run_test_command(file)).to include('rspec spec/data/sample_spec.rb') }
