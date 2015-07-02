@@ -1,8 +1,6 @@
-require 'mumukit'
-
-class TestRunner
+class TestRunner < Mumukit::FileTestRunner
   def rspec_path
-    @config['rspec_command']
+    config['rspec_command']
   end
 
   def run_test_command(file)
