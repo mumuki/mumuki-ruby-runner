@@ -8,11 +8,11 @@ class TestRunner < Mumukit::FileTestRunner
   end
 
   def post_process_file(file, result, status)
-    [transform(JSON.parse(result)['examples']), status]
+    [transform(JSON.parse(result)['examples'])]
   end
 
   def transform(examples)
-    examples.map { |e| {title: e['full_description'], exit: e['status'].to_sym, out: parse_out(e['exception']) } }
+    examples.map { |e| [e['full_description'], e['status'].to_sym, parse_out(e['exception'])] }
   end
 
   def parse_out(exception)
