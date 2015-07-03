@@ -15,8 +15,8 @@ describe 'runner' do
                                  content: 'x = 3',
                                  expectations: [])
 
-    expect(response[:status]).to eq 'passed'
     expect(response[:result]).to include('1 example, 0 failures')
+    expect(response[:status]).to eq 'passed'
   end
 
   it 'answers a valid hash when submission is not ok' do
