@@ -9,6 +9,8 @@ class TestRunner < Mumukit::FileTestRunner
 
   def post_process_file(file, result, status)
     [transform(JSON.parse(result)['examples'])]
+  rescue JSON::ParserError
+    [result, :errored]
   end
 
   def transform(examples)

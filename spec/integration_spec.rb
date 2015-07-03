@@ -1,3 +1,5 @@
+require_relative '../spec/spec_helper' #FIXME remove. There must be an issue with mumukit-bridge requires
+
 require 'mumukit/bridge'
 
 describe 'runner' do
@@ -16,19 +18,42 @@ describe 'runner' do
                                  content: 'x = 3',
                                  expectations: [])
 
-    expect(response[:result]).to include('1 example, 0 failures')
-    expect(response[:status]).to eq 'passed'
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{title: 'foo ', status: :passed, result: ''}],
+                           status: :passed,
+                           feedback: '',
+                           expectation_results: [],
+                           result: '')
   end
 
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
-        run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
                    extra: '',
-                   content: 'x = 2).',
+                   content: 'x = 2',
                    expectations: [])
 
-    expect(response[:status]).to eq 'failed'
+    expect(response).to eq(response_type: :structured,
+                           test_results: [
+                               {title: 'foo ', status: :failed, result: "\nexpected: 3\n     got: 2\n\n(compared using ==)\n"}],
+                           status: :failed,
+                           feedback: '',
+                           expectation_results: [],
+                           result: '')
   end
 
+  it 'answers a valid hash when submission has compilation errors' do
+    response = bridge.
+        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
+                   extra: '',
+                   content: 'x = ).',
+                   expectations: [])
+
+    expect(response[:status]).to eq :errored
+    expect(response[:response_type]).to eq(:unstructured)
+    expect(response[:test_results]).to be_empty
+    expect(response[:result]).to include("syntax error, unexpected ')' (SyntaxError)\nx = ).")
+
+  end
 
 end
