@@ -1,11 +1,9 @@
-require 'mumukit'
-
-class TestCompiler
-  def compile(test_src, extra_src, content_src)
+class TestCompiler < Mumukit::FileTestCompiler
+  def compile(request)
     <<EOF
-#{extra_src}
-#{content_src}
-#{test_src}
+#{request.extra}
+#{request.content}
+#{request.test}
 EOF
   end
 end

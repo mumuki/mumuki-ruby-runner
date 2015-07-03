@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-gem 'mumukit', github: 'uqbar-project/mumukit', tag: 'v0.2.0'
+gem 'mumukit', github: 'uqbar-project/mumukit', branch: 'master'
 gem 'rspec', '2.13'
 
 group :test do
