@@ -1,18 +1,18 @@
 GIT
   remote: git://github.com/mumuki/mumukit-bridge.git
-  revision: 3145ee21b4a64d0c525e811b857e9ea3e248554c
-  branch: master
+  revision: 06671e523f106a72cb0c624f49f758dbc8fee86b
+  tag: v0.2.0
   specs:
-    mumukit-bridge (0.1.0)
+    mumukit-bridge (0.2.0)
       activesupport
       rest-client
 
 GIT
   remote: git://github.com/uqbar-project/mumukit.git
-  revision: cd0c8119de68c5f9d11219301796879b10ed7725
-  branch: master
+  revision: 851aede8dfccdfecca479628df8b9c856a696f5a
+  tag: v0.7.0
   specs:
-    mumukit (0.6.0)
+    mumukit (0.7.0)
       activesupport
       i18n (~> 0.7)
       sinatra (~> 1.4)
