@@ -1,10 +1,30 @@
+require 'docker'
+require 'pathname'
+
 class TestRunner < Mumukit::FileTestRunner
   def rspec_path
     config['rspec_command']
   end
 
-  def run_test_command(file)
-    "#{rspec_path} #{file.path} -f json 2>&1"
+  def run_test_file!(file)
+    filename = File.absolute_path file.path
+    pathname = Pathname.new(filename)
+    container = Docker::Container.create(
+        'Image' => 'abdd878dd50a',
+        'Cmd' => ['rspec', "#{filename}",'-f', 'json'],
+        'HostConfig' => {
+            'Binds' => ["#{pathname.dirname}:#{pathname.dirname}"]},
+        'Volumes' => {
+            pathname.dirname => {}})
+    container.start
+    exit = container.json['State']['ExitCode']
+    sleep(2)
+    logs = container.streaming_logs(stdout: true, stderr: true)
+    if exit == 0
+      [logs, :passed]
+    else
+      [logs, :failed]
+    end
   end
 
   def post_process_file(file, result, status)

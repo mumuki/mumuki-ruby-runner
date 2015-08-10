@@ -11,6 +11,26 @@ describe 'runner' do
   end
   after(:all) { Process.kill 'TERM', @pid }
 
+  it 'prevents malicious code with requires' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 content: 'require "socket"; x = 3',
+                                 expectations: [])
+
+    expect(response[:status]).to eq(:errored)
+  end
+
+  it 'prevents malicious code with requires' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 content: 'require "socket"; x = 3',
+                                 expectations: [])
+
+    expect(response).to eq(:errored)
+  end
+
+
+
   it 'answers a valid hash when submission is ok' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
                                  extra: '',

@@ -13,11 +13,6 @@ describe TestRunner do
   let(:file_multi) { File.new('spec/data/sample_multi.rb') }
   let(:file_failed) { File.new('spec/data/sample_failed.rb') }
 
-  describe '#run_test_command' do
-    it { expect(runner.run_test_command(file)).to include('rspec spec/data/sample.rb') }
-    it { expect(runner.run_test_command(file)).to include('2>&1') }
-  end
-
   describe '#run_compilation!' do
     context 'on simple passed file' do
       let(:results) { runner.run_compilation!(file) }
