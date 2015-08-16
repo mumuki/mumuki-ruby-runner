@@ -20,6 +20,7 @@ class TestRunner < Mumukit::FileTestRunner
     container.wait(Mumukit.config.command_time_limit)
     exit = container.json['State']['ExitCode']
     logs = container.streaming_logs(stdout: true, stderr: true)
+    container.delete
     if exit == 0
       [logs, :passed]
     else
