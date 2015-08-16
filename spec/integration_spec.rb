@@ -35,6 +35,21 @@ f.close
   end
 
 
+  it 'prevents malicious allocation related code' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 expectations: [],
+                                 content: <<-EOF
+
+  l = (1..1024*1024*10).map { Object.new }
+  l.size
+
+    EOF
+    )
+    expect(response).to eq(:errored)
+  end
+
+
   it 'answers a valid hash when submission is ok' do
     response = bridge.run_tests!(test: 'describe "foo" do  it("bar") { expect(x).to eq 3 } end',
                                  extra: '',
