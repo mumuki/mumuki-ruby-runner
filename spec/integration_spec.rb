@@ -61,6 +61,22 @@ describe 'runner' do
                            result: '')
   end
 
+  it 'answers a valid hash when submission timeouts' do
+    response = bridge.
+        run_tests!(test: 'describe("foo") do  it("bar"){ sleep(300) ; expect(x).to eq 3 } end',
+                   extra: '',
+                   content: 'x = 2',
+                   expectations: [])
+
+    expect(response).to eq(response_type: :unstructured,
+                           test_results: [],
+                           status: :aborted,
+                           feedback: '',
+                           expectation_results: [],
+                           result: "Execution time limit of %{limit}s exceeded. Is your program performing an infinite loop or recursion?")
+  end
+
+
   it 'answers a valid hash when submission has compilation errors' do
     response = bridge.
         run_tests!(test: 'describe("foo") do  it("bar"){ expect(x).to eq 3 } end',

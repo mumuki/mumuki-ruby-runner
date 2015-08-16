@@ -7,26 +7,51 @@ class TestRunner < Mumukit::FileTestRunner
   end
 
   def run_test_file!(file)
+    container = create_container(file)
+
+    run_container(container)
+
+    exit = container.json['State']['ExitCode']
+    logs = container.streaming_logs(stdout: true, stderr: true)
+
+    if exit == 0
+      [logs, :passed]
+    else
+      [logs, :failed]
+    end
+  rescue Docker::Error::TimeoutError => e
+    [I18n.t('mumukit.time_exceeded', limit: Mumukit.config.command_time_limit), :aborted]
+  ensure
+    destroy_container(container)
+  end
+
+  def destroy_container(container)
+    container.stop
+    container.delete
+  end
+
+  def create_container(file)
     filename = File.absolute_path file.path
     pathname = Pathname.new(filename)
-    container = Docker::Container.create(
+
+    Docker::Container.create(
         'Image' => 'abdd878dd50a',
         'Cmd' => ['rspec', "#{filename}", '-f', 'json'],
         'HostConfig' => {
             'Binds' => ["#{pathname.dirname}:#{pathname.dirname}"]},
         'Volumes' => {
             pathname.dirname => {}})
+  end
+
+  def run_container(container)
     container.start
     container.wait(Mumukit.config.command_time_limit)
-    exit = container.json['State']['ExitCode']
-    logs = container.streaming_logs(stdout: true, stderr: true)
-    container.delete
-    if exit == 0
-      [logs, :passed]
-    else
-      [logs, :failed]
-    end
   end
+
+
+
+  #------------------
+
 
   def post_process_file(file, result, status)
     [transform(JSON.parse(result)['examples'])]
