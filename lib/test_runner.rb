@@ -17,8 +17,8 @@ class TestRunner < Mumukit::FileTestRunner
         'Volumes' => {
             pathname.dirname => {}})
     container.start
+    container.wait
     exit = container.json['State']['ExitCode']
-    sleep(2)
     logs = container.streaming_logs(stdout: true, stderr: true)
     if exit == 0
       [logs, :passed]
