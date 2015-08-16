@@ -1,16 +1,18 @@
 require 'docker'
 require 'pathname'
 
-class TestSandbox
+class IsolatedEnvironment
   attr_accessor :container
 
   def configure!(file)
     filename = File.absolute_path file.path
     pathname = Pathname.new(filename)
 
+    command = yield(filename).split
+
     self.container = Docker::Container.create(
         'Image' => 'abdd878dd50a',
-        'Cmd' => ['rspec', "#{filename}", '-f', 'json'],
+        'Cmd' => command,
         'HostConfig' => {
             'Binds' => ["#{pathname.dirname}:#{pathname.dirname}"]},
         'Volumes' => {
@@ -20,35 +22,9 @@ class TestSandbox
   def run!
     container.start
     container.wait(Mumukit.config.command_time_limit)
-  end
 
-  def destroy!
-    container.stop
-    container.delete
-  end
-
-  def exit_code
-    container.json['State']['ExitCode']
-  end
-
-  def out
-    container.streaming_logs(stdout: true, stderr: true)
-  end
-
-end
-
-class TestRunner < Mumukit::FileTestRunner
-  def rspec_path
-    config['rspec_command']
-  end
-
-  def run_test_file!(file)
-    sandbox = TestSandbox.new
-    sandbox.configure! file
-    sandbox.run!
-
-    exit = sandbox.exit_code
-    out = sandbox.out
+    exit = container.json['State']['ExitCode']
+    out = container.streaming_logs(stdout: true, stderr: true)
 
     if exit == 0
       [out, :passed]
@@ -57,8 +33,27 @@ class TestRunner < Mumukit::FileTestRunner
     end
   rescue Docker::Error::TimeoutError => e
     [I18n.t('mumukit.time_exceeded', limit: Mumukit.config.command_time_limit), :aborted]
+  end
+
+  def destroy!
+    if container
+      container.stop
+      container.delete
+    end
+  end
+end
+
+class TestRunner < Mumukit::FileTestRunner
+  def rspec_path
+    config['rspec_command']
+  end
+
+  def run_test_file!(file)
+    env = IsolatedEnvironment.new
+    env.configure!(file) { |filename| "rspec #{filename} -f json" }
+    env.run!
   ensure
-    sandbox.destroy!
+    env.destroy!
   end
 
   #------------------
