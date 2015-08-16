@@ -11,13 +11,13 @@ class TestRunner < Mumukit::FileTestRunner
     pathname = Pathname.new(filename)
     container = Docker::Container.create(
         'Image' => 'abdd878dd50a',
-        'Cmd' => ['rspec', "#{filename}",'-f', 'json'],
+        'Cmd' => ['rspec', "#{filename}", '-f', 'json'],
         'HostConfig' => {
             'Binds' => ["#{pathname.dirname}:#{pathname.dirname}"]},
         'Volumes' => {
             pathname.dirname => {}})
     container.start
-    container.wait
+    container.wait(Mumukit.config.command_time_limit)
     exit = container.json['State']['ExitCode']
     logs = container.streaming_logs(stdout: true, stderr: true)
     if exit == 0
