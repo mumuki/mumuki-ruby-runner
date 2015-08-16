@@ -4,19 +4,21 @@ require 'pathname'
 class IsolatedEnvironment
   attr_accessor :container
 
-  def configure!(file)
-    filename = File.absolute_path file.path
-    pathname = Pathname.new(filename)
+  def configure!(*files)
 
-    command = yield(filename).split
+    filenames = files.map { |it| File.absolute_path(it.path) }
+    dirnames = filenames.map { |it| Pathname.new(it).dirname }
+
+    binds = dirnames.map { |it| "#{it}:#{it}" }
+    volumes = Hash[[dirnames.map { |it| [it, {}] }]]
+
+    command = yield(*filenames).split
 
     self.container = Docker::Container.create(
         'Image' => 'abdd878dd50a',
         'Cmd' => command,
-        'HostConfig' => {
-            'Binds' => ["#{pathname.dirname}:#{pathname.dirname}"]},
-        'Volumes' => {
-            pathname.dirname => {}})
+        'HostConfig' => {'Binds' => binds},
+        'Volumes' => volumes)
   end
 
   def run!
