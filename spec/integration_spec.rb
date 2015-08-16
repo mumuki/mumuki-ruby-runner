@@ -11,24 +11,28 @@ describe 'runner' do
   end
   after(:all) { Process.kill 'TERM', @pid }
 
-  it 'prevents malicious code with requires' do
+  it 'prevents malicious net related code' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
                                  extra: '',
-                                 content: 'require "socket"; x = 3',
+                                 content: 'require "net/http"; Net::HTTP.get("http://www.google.com")',
                                  expectations: [])
-
-    expect(response[:status]).to eq(:errored)
-  end
-
-  it 'prevents malicious code with requires' do
-    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
-                                 extra: '',
-                                 content: 'require "socket"; x = 3',
-                                 expectations: [])
-
     expect(response).to eq(:errored)
   end
 
+  it 'prevents malicious FS related code' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 expectations: [],
+                                 content: <<-EOF
+w = (1..1024*1024).map { 'a' }.join ; nil
+f = File.new('yomama', 'w+')
+4.times { f << w }
+f.close
+
+    EOF
+    )
+    expect(response).to eq(:errored)
+  end
 
 
   it 'answers a valid hash when submission is ok' do
@@ -73,7 +77,7 @@ describe 'runner' do
                            status: :aborted,
                            feedback: '',
                            expectation_results: [],
-                           result: "Execution time limit of %{limit}s exceeded. Is your program performing an infinite loop or recursion?")
+                           result: 'Execution time limit of 4s exceeded. Is your program performing an infinite loop or recursion?')
   end
 
 
