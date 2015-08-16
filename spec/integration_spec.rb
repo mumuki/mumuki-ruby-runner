@@ -32,13 +32,13 @@ describe 'runner' do
 
 
   it 'answers a valid hash when submission is ok' do
-    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+    response = bridge.run_tests!(test: 'describe "foo" do  it("bar") { expect(x).to eq 3 } end',
                                  extra: '',
                                  content: 'x = 3',
                                  expectations: [])
 
     expect(response).to eq(response_type: :structured,
-                           test_results: [{title: 'foo ', status: :passed, result: ''}],
+                           test_results: [{title: 'foo bar', status: :passed, result: ''}],
                            status: :passed,
                            feedback: '',
                            expectation_results: [],
@@ -47,14 +47,14 @@ describe 'runner' do
 
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
-        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
+        run_tests!(test: 'describe("foo") do  it("bar"){ expect(x).to eq 3 } end',
                    extra: '',
                    content: 'x = 2',
                    expectations: [])
 
     expect(response).to eq(response_type: :structured,
                            test_results: [
-                               {title: 'foo ', status: :failed, result: "\nexpected: 3\n     got: 2\n\n(compared using ==)\n"}],
+                               {title: 'foo bar', status: :failed, result: "\nexpected: 3\n     got: 2\n\n(compared using ==)\n"}],
                            status: :failed,
                            feedback: '',
                            expectation_results: [],
@@ -63,7 +63,7 @@ describe 'runner' do
 
   it 'answers a valid hash when submission has compilation errors' do
     response = bridge.
-        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
+        run_tests!(test: 'describe("foo") do  it("bar"){ expect(x).to eq 3 } end',
                    extra: '',
                    content: 'x = ).',
                    expectations: [])
