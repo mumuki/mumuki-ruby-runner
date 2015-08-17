@@ -17,7 +17,10 @@ class IsolatedEnvironment
     self.container = Docker::Container.create(
         'Image' => 'abdd878dd50a',
         'Cmd' => command,
-        'HostConfig' => {'Binds' => binds},
+        'NetworkDisabled' => true,
+        'HostConfig' => {
+            #  'Memory' => Mumukit.config.command_size_limit,
+            'Binds' => binds},
         'Volumes' => volumes)
   end
 

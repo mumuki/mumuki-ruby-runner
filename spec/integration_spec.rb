@@ -16,7 +16,8 @@ describe 'runner' do
                                  extra: '',
                                  content: 'require "net/http"; Net::HTTP.get("http://www.google.com")',
                                  expectations: [])
-    expect(response).to eq(:errored)
+    expect(response[:status]).to eq(:errored)
+    expect(response[:result]).to include("undefined method `hostname'")
   end
 
   it 'prevents malicious FS related code' do
