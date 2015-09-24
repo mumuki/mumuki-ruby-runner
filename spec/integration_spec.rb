@@ -11,7 +11,6 @@ describe 'runner' do
   end
   after(:all) { Process.kill 'TERM', @pid }
 
-
   it 'answers a valid hash when submission is ok' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
                                  extra: '',
