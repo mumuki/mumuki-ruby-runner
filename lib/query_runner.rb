@@ -5,8 +5,9 @@ class QueryRunner <Mumukit::Stub
 
   def run_query!(request)
     begin
-       eval_query compile_query(request)
-    rescue Exception.new('Something went wrong, check that your query is correct')
+      result= eval_query compile_query(request)
+    rescue #Exception.new('Something went wrong, check that your query is correct')
+      result="Something went Wrong, Check that the sintax you have entered is correct"
     end
   end
 
