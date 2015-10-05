@@ -4,7 +4,10 @@ class QueryRunner <Mumukit::Stub
 
 
   def run_query!(request)
-     eval_query compile_query(request)
+    begin
+       eval_query compile_query(request)
+    rescue Exception.new('Something went wrong, check that your query is correct')
+    end
   end
 
   def compile_query(r)
