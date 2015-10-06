@@ -11,5 +11,5 @@ describe QueryRunner do
   it { expect(query_runner.run_query!(request)[0]).to eq '=> 5' }
   it { expect(query_runner.run_query!(request_content)[0]).to eq '=> 4' }
   it { expect(query_runner.run_query!(request_extra)[0]).to eq '=> 66' }
-  it { expect(query_runner.run_query!(request_error)[0]).to eq '=> Something went Wrong, Check that the sintax you have entered is correct' }
+  it { expect(query_runner.run_query!(request_error)[0]).to eq raise_exception Exception.new() }
 end
