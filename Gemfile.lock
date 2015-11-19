@@ -8,9 +8,9 @@ GIT
       rest-client
 
 GIT
-  remote: git://github.com/uqbar-project/mumukit.git
-  revision: 2a91d37768038607fbe03aeea95ee0e2841dc9c9
-  tag: v0.7.2
+  remote: git://github.com/mumuki/mumukit.git
+  revision: ef9f5913721a666ebef68efb97b2241e5841c6e9
+  branch: master
   specs:
     mumukit (0.7.2)
       activesupport
@@ -20,7 +20,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.3)
+    activesupport (4.2.5)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -34,7 +34,7 @@ GEM
     i18n (0.7.0)
     json (1.8.3)
     mime-types (2.6.1)
-    minitest (5.7.0)
+    minitest (5.8.3)
     netrc (0.10.3)
     rack (1.6.4)
     rack-protection (1.5.3)

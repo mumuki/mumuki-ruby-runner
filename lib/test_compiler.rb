@@ -1,9 +1,5 @@
-class TestCompiler < Mumukit::FileTestCompiler
-  def compile(request)
-    <<EOF
-#{request.extra}
-#{request.content}
-#{request.test}
-EOF
+class TestCompiler < Mumukit::MashupTestCompiler
+  def tempfile_extension
+    '.rb'
   end
 end
