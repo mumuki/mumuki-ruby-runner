@@ -15,7 +15,7 @@ class IsolatedEnvironment
     command = yield(*filenames).split
 
     self.container = Docker::Container.create(
-        'Image' => 'abdd878dd50a',
+        'Image' => Mumukit.config.docker_image,
         'Cmd' => command,
         'NetworkDisabled' => true,
         'HostConfig' => {
