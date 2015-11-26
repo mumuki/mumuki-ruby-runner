@@ -1,7 +1,7 @@
 require 'docker'
 require 'pathname'
 
-class IsolatedEnvironment
+class Mumukit::IsolatedEnvironment
   attr_accessor :container
 
   def configure!(*files)
@@ -48,21 +48,47 @@ class IsolatedEnvironment
   end
 end
 
+module Mumukit
+  module WithIsolatedEnvironment
+    def run_test_file!(file)
+      env = Mumukit::IsolatedEnvironment.new
+      env.configure!(file) { |filename| run_test_command(filename) }
+      env.run!
+    ensure
+      env.destroy!
+    end
+
+    def run_test_command(file)
+      raise 'You need to implement this method'
+    end
+  end
+end
+
+module Mumukit
+  module WithEmbeddedEnvironment
+    extend Mumukit::WithCommandLine
+
+    def run_test_file!(file)
+      run_command run_test_command(file.path)
+    end
+
+    def run_test_command(file)
+      raise 'You need to implement this method'
+    end
+  end
+end
+
+
 class TestRunner < Mumukit::FileTestRunner
+  include Mumukit::WithIsolatedEnvironment
+
   def rspec_path
     config['rspec_command']
   end
 
-  def run_test_file!(file)
-    env = IsolatedEnvironment.new
-    env.configure!(file) { |filename| "rspec #{filename} -f json" }
-    env.run!
-  ensure
-    env.destroy!
+  def run_test_command(filename)
+    "#{rspec_path} #{filename} -f json"
   end
-
-  #------------------
-
 
   def post_process_file(file, result, status)
     if [:passed, :failed].include? status
