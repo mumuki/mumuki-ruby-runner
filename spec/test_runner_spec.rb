@@ -14,8 +14,7 @@ describe TestRunner do
   let(:file_failed) { File.new('spec/data/sample_failed.rb') }
 
   describe '#run_test_command' do
-    it { expect(runner.run_test_command(file)).to include('rspec spec/data/sample.rb') }
-    it { expect(runner.run_test_command(file)).to include('2>&1') }
+    it { expect(runner.run_test_command(file.path)).to include('rspec spec/data/sample.rb') }
   end
 
   describe '#run_compilation!' do

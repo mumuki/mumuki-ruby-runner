@@ -1,11 +1,9 @@
+sudo: required
 language: ruby
 env: RACK_ENV=development
 rvm:
 - 2.0.0
-deploy:
-  provider: heroku
-  api_key:
-    secure: PsWRZThldZiIyxmb84/qIgcnlwUf8QxWT01Zn+sOwQs+bFRJ2zcwG58rZKAR0IJbEpNxPhDwBYl0u3exPFQSV+1RvMTKCijl6kS3EAHdh7Jq7bk7tbmNP/2hioy1PHH7qZliM1phWK0atzB3eWegLx+7spkaRgLx1upzeGzyn+A=
-  app: mumuki-rspec-server
-  on:
-    repo: mumuki/mumuki-rspec-server
+services:
+  - docker
+before_install:
+- docker pull mumuki/mumuki-rspec-worker

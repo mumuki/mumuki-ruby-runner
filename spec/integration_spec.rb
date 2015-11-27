@@ -11,14 +11,39 @@ describe 'runner' do
   end
   after(:all) { Process.kill 'TERM', @pid }
 
-  it 'answers a valid hash when submission is ok' do
+  it 'prevents malicious net related code' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 content: 'require "net/http"; Net::HTTP.get("http://www.google.com")',
+                                 expectations: [])
+    expect(response[:status]).to eq(:errored)
+    expect(response[:result]).to include("undefined method `hostname'")
+  end
+
+
+  pending 'prevents malicious allocation related code' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 expectations: [],
+                                 content: <<-EOF
+
+  l = (1..1024*1024*10).map { Object.new }
+  l.size
+
+    EOF
+    )
+    expect(response).to eq(:errored)
+  end
+
+
+  it 'answers a valid hash when submission is ok' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it("bar") { expect(x).to eq 3 } end',
                                  extra: '',
                                  content: 'x = 3',
                                  expectations: [])
 
     expect(response).to eq(response_type: :structured,
-                           test_results: [{title: 'foo ', status: :passed, result: ''}],
+                           test_results: [{title: 'foo bar', status: :passed, result: ''}],
                            status: :passed,
                            feedback: '',
                            expectation_results: [],
@@ -27,23 +52,39 @@ describe 'runner' do
 
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
-        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
+        run_tests!(test: 'describe("foo") do  it("bar"){ expect(x).to eq 3 } end',
                    extra: '',
                    content: 'x = 2',
                    expectations: [])
 
     expect(response).to eq(response_type: :structured,
                            test_results: [
-                               {title: 'foo ', status: :failed, result: "\nexpected: 3\n     got: 2\n\n(compared using ==)\n"}],
+                               {title: 'foo bar', status: :failed, result: "\nexpected: 3\n     got: 2\n\n(compared using ==)\n"}],
                            status: :failed,
                            feedback: '',
                            expectation_results: [],
                            result: '')
   end
 
+  it 'answers a valid hash when submission timeouts' do
+    response = bridge.
+        run_tests!(test: 'describe("foo") do  it("bar"){ sleep(300) ; expect(x).to eq 3 } end',
+                   extra: '',
+                   content: 'x = 2',
+                   expectations: [])
+
+    expect(response).to eq(response_type: :unstructured,
+                           test_results: [],
+                           status: :aborted,
+                           feedback: '',
+                           expectation_results: [],
+                           result: 'Execution time limit of 4s exceeded. Is your program performing an infinite loop or recursion?')
+  end
+
+
   it 'answers a valid hash when submission has compilation errors' do
     response = bridge.
-        run_tests!(test: 'describe("foo") do  it { expect(x).to eq 3 } end',
+        run_tests!(test: 'describe("foo") do  it("bar"){ expect(x).to eq 3 } end',
                    extra: '',
                    content: 'x = ).',
                    expectations: [])
