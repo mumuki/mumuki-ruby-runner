@@ -15,4 +15,4 @@ after_success:
 - chmod 600 deploy_rsa
 - mv deploy_rsa ~/.ssh/id_rsa
 - git remote add live ssh://root@162.243.111.176/var/repo/rspec.git
-- git push live
+- git push live HEAD
