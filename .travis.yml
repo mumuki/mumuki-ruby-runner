@@ -1,6 +1,7 @@
 sudo: required
 language: ruby
 env: RACK_ENV=development
+sudo: false
 rvm:
 - 2.0.0
 services:
@@ -10,4 +11,4 @@ before_install:
   -in deploy_rsa.enc -out deploy_rsa -d
 - docker pull mumuki/mumuki-rspec-worker
 after_success:
-- ./escualo rspec 162.243.111.176
+- wget https://raw.githubusercontent.com/mumuki/mumuki-escualo/master/travis_deploy && chmod u+x travis_deploy && ./travis_deploy rspec 162.243.111.176
