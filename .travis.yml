@@ -5,8 +5,9 @@ rvm:
 - 2.0.0
 services:
 - docker
+addons:
+  ssh_known_hosts: 162.243.111.176
 before_install:
-- echo -e "Host example.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - openssl aes-256-cbc -K $encrypted_1590a5cf432e_key -iv $encrypted_1590a5cf432e_iv
   -in deploy_rsa.enc -out deploy_rsa -d
 - docker pull mumuki/mumuki-rspec-worker
