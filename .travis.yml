@@ -4,6 +4,14 @@ env: RACK_ENV=development
 rvm:
 - 2.0.0
 services:
-  - docker
+- docker
 before_install:
+- echo -e "Host example.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- openssl aes-256-cbc -K $encrypted_1590a5cf432e_key -iv $encrypted_1590a5cf432e_iv
+  -in deploy_rsa.enc -out deploy_rsa -d
 - docker pull mumuki/mumuki-rspec-worker
+after_success:
+- chmod 600 deploy_rsa
+- mv deploy_rsa ~/.ssh/id_rsa
+- git remote add live ssh://root@162.243.111.176/var/repo/rspec.git
+- git push live
