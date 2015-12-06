@@ -9,10 +9,10 @@ GIT
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: 59ebefafbb410649362d71c7d7b50ee872a603de
-  branch: master
+  revision: 65e8080d4ab6ca72d3de85ab88d57e5ca8d63bd2
+  tag: v0.8.0
   specs:
-    mumukit (0.7.2)
+    mumukit (0.8.0)
       activesupport
       docker-api (~> 1.22.2)
       i18n (~> 0.7)
