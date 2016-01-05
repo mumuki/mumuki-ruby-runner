@@ -9,10 +9,10 @@ GIT
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: 65e8080d4ab6ca72d3de85ab88d57e5ca8d63bd2
-  tag: v0.8.0
+  revision: c56dac925a68af28a1b98a245b7eb0be617bacab
+  tag: v0.9.0
   specs:
-    mumukit (0.8.0)
+    mumukit (0.9.0)
       activesupport
       docker-api (~> 1.22.2)
       i18n (~> 0.7)
@@ -69,7 +69,7 @@ GEM
       eventmachine (~> 1.0, >= 1.0.4)
       rack (~> 1.0)
     thread_safe (0.3.5)
-    tilt (2.0.1)
+    tilt (2.0.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
