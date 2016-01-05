@@ -7,5 +7,6 @@ Mumukit.configure do |config|
 end
 
 require_relative './test_compiler'
+require_relative './metadata_publisher'
 require_relative './test_runner'
 require_relative './query_runner'
