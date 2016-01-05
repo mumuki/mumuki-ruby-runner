@@ -1,4 +1,4 @@
-class QueryRunner <Mumukit::Stub
+class QueryRunner <Mumukit::Hook
   include Mumukit::WithTempfile
   include Mumukit::WithCommandLine
 

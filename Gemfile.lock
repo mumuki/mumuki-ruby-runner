@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: 65e8080d4ab6ca72d3de85ab88d57e5ca8d63bd2
-  tag: v0.8.0
+  revision: ceb1b29cf171cf56f2d8a3715b680f715ba5ba43
+  branch: master
   specs:
     mumukit (0.8.0)
       activesupport
@@ -69,7 +69,7 @@ GEM
       eventmachine (~> 1.0, >= 1.0.4)
       rack (~> 1.0)
     thread_safe (0.3.5)
-    tilt (2.0.1)
+    tilt (2.0.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
