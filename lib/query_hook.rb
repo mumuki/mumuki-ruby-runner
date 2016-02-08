@@ -1,6 +1,5 @@
 class QueryHook < Mumukit::Templates::FileHook
   isolated true
-  structured true
 
   def tempfile_extension
     '.rb'
