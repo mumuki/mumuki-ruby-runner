@@ -6,7 +6,6 @@ Mumukit.configure do |config|
   config.structured = true
 end
 
-require_relative './test_compiler'
-require_relative './metadata_publisher'
-require_relative './test_runner'
-require_relative './query_runner'
+require_relative './metadata_hook'
+require_relative './test_hook'
+require_relative './query_hook'

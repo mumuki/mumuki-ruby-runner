@@ -1,4 +1,4 @@
-class MetadataPublisher < Mumukit::Hook
+class MetadataHook < Mumukit::Hook
   def metadata
     {language: {
         name: 'ruby',
