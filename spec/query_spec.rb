@@ -1,8 +1,8 @@
 require_relative './spec_helper'
 require 'ostruct'
 
-describe QueryHook do
-  let(:hook) { QueryHook.new(nil) }
+describe RubyQueryHook do
+  let(:hook) { RubyQueryHook.new(nil) }
   let(:file) { hook.compile(request) }
   let(:result) {
     hook.run!(file)
