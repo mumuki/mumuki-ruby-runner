@@ -1,12 +1,11 @@
-require_relative '../spec/spec_helper' #FIXME remove. There must be an issue with mumukit-bridge requires
-
 require 'mumukit/bridge'
+require 'active_support/all'
 
 describe 'runner' do
-  let(:bridge) { Mumukit::Bridge::Bridge.new('http://localhost:4567') }
+  let(:bridge) { Mumukit::Bridge::Runner.new('http://localhost:4569') }
 
   before(:all) do
-    @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
+    @pid = Process.spawn 'rackup -p 4569', err: '/dev/null'
     sleep 3
   end
   after(:all) { Process.kill 'TERM', @pid }

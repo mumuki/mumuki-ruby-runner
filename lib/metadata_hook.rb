@@ -1,4 +1,4 @@
-class MetadataHook < Mumukit::Hook
+class RubyMetadataHook < Mumukit::Hook
   def metadata
     {language: {
         name: 'ruby',

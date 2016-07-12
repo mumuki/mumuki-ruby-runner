@@ -1,14 +1,8 @@
 require_relative './spec_helper'
 
 
-class File
-  def unlink
-  end
-end
-
-
 describe 'running' do
-  let(:runner) { TestHook.new('rspec_command' => 'rspec') }
+  let(:runner) { RubyTestHook.new('rspec_command' => 'rspec') }
   let(:file) { File.new('spec/data/sample.rb') }
   let(:file_multi) { File.new('spec/data/sample_multi.rb') }
   let(:file_failed) { File.new('spec/data/sample_failed.rb') }
