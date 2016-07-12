@@ -2,17 +2,10 @@ language: ruby
 env:
   matrix:
   - RACK_ENV=development
-  global:
-    secure: F+FlXXw8fpgtus5gZcNvTUxrfiD44ZNQAO9+VQHFoUd6U7dxhG8QPk0lPPVPonEWGcCsF9v1CcHgrw0OZy8L2CRGvBEhMik9eq/U46ESwvrbtEHy+jbFQK9xgUwRldHQo0ZDjsY1+XrOIdCXtJvyJvL2FPgXKelrebhdOy7H3yU=
 sudo: false
 rvm:
 - 2.0.0
 services:
 - docker
 before_install:
-- openssl aes-256-cbc -K $encrypted_1590a5cf432e_key -iv $encrypted_1590a5cf432e_iv
-  -in escualo_rsa.enc -out escualo_rsa -d
 - docker pull mumuki/mumuki-rspec-worker
-after_success:
-- wget https://raw.githubusercontent.com/mumuki/mumuki-escualo-deploy/master/travis_deploy && chmod u+x travis_deploy
-- ./travis_deploy rspec
