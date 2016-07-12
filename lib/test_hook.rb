@@ -1,6 +1,6 @@
 class RubyTestHook < Mumukit::Templates::FileHook
   mashup
-  isolated false
+  isolated true
   structured true
 
   def tempfile_extension
