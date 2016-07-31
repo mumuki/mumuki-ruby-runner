@@ -4,6 +4,7 @@ Mumukit.runner_name = 'ruby'
 Mumukit.configure do |config|
   config.docker_image = 'mumuki/mumuki-rspec-worker'
   config.structured = true
+  config.stateful = true
 end
 
 require_relative './metadata_hook'
