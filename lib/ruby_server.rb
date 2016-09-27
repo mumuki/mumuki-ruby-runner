@@ -3,6 +3,7 @@ require 'mumukit'
 Mumukit.runner_name = 'ruby'
 Mumukit.configure do |config|
   config.docker_image = 'mumuki/mumuki-rspec-worker'
+  config.comment_type = Mumukit::Directives::CommentType::Ruby
   config.structured = true
   config.stateful = true
 end
