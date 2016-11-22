@@ -7,9 +7,22 @@ class RubyQueryHook < Mumukit::Templates::FileHook
 
   def compile_file_content(r)
     <<ruby
+    class MumukiConsole
+      def self.write(string)
+      end
+      def self.enter_cookie!
+        @@old_stdout = $stdout
+        $stdout = MumukiConsole
+      end
+      def self.exit_cookie!
+        $stdout = @@old_stdout
+      end
+    end
     #{r.extra}
     #{r.content}
+    MumukiConsole.enter_cookie!
     #{compile_cookie(r.cookie)}
+    MumukiConsole.exit_cookie!
     #{compile_query(r.query)}
 ruby
   end
@@ -20,7 +33,7 @@ ruby
 
   def compile_query(query)
     if query.start_with? 'def '
-      "#{query}\nputs \"nil\""
+      "#{query}\nputs \"=> nil\""
     else
       "print('=> ' + (#{query}).inspect)"
     end
