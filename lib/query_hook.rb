@@ -20,7 +20,7 @@ ruby
 
   def compile_query(query)
     if query.start_with? 'def '
-      "#{query}\nputs \"<function>\""
+      "#{query}\nputs \"nil\""
     else
       "print('=> ' + (#{query}).inspect)"
     end
