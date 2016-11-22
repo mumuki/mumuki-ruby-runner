@@ -19,6 +19,60 @@ describe 'runner' do
     expect(response[:result]).to include("undefined method `hostname'")
   end
 
+  it 'supports queries with interpolations' do
+    response = bridge.run_query!(query: 'm',
+                                 extra: "#[IgnoreContentOnQuery]#\n m = 5",
+                                 content: 'x',
+                                 expectations: [])
+
+    expect(response[:status]).to eq(:passed)
+    expect(response[:result]).to eq "=> 5\n"
+  end
+
+
+  it 'supports tests with interpolations' do
+    response = bridge.run_tests! content: 'a = b',
+                                test: "
+                                describe do
+                                  it do
+                                    b = 6
+                                    #...content...#
+                                    expect(a).to eq 6
+                                  end
+                                end",
+                                expectations: []
+
+    expect(response).to eq expectation_results: [],
+                           feedback: '',
+                           response_type: :structured,
+                           result: '',
+                           status: :passed,
+                           test_results: [{:title=>"should eq 6", :status=>:passed, :result=>''}]
+  end
+
+  it 'supports queries with non-ascii encodings' do
+    response = bridge.run_query!(query: 'a == a',
+                                 cookie: [ "a = '¡Comprá empanadas, Graciela!'" ],
+                                 expectations: [])
+
+    expect(response).to eq status: :passed,
+                           result: "=> true\n"
+  end
+
+  it 'suports tests with non-ascii encodings' do
+    response = bridge.run_tests!(test: 'describe "che" do  it("tomá") { expect(x).to eq 3 } end',
+                                 extra: '',
+                                 content: 'x = 3',
+                                 expectations: [])
+
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{title: 'che tomá', status: :passed, result: ''}],
+                           status: :passed,
+                           feedback: '',
+                           expectation_results: [],
+                           result: '')
+  end
+
 
   it 'prevents malicious allocation related code' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(l).to eq 3 } end',
@@ -32,7 +86,7 @@ describe 'runner' do
     EOF
     )
     expect(response).to eq(expectation_results: [],
-                           feedback: "",
+                           feedback: '',
                            response_type: :unstructured,
                            result: "Execution time limit of 4s exceeded. Is your program performing an infinite loop or recursion?",
                            status: :aborted,
