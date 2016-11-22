@@ -32,4 +32,21 @@ describe RubyQueryHook do
     let(:request) { struct(query: 'y', cookie: ['y=5', 'raise a']) }
     it { expect(result[0]).to eq "=> 5\n" }
   end
+  context 'query and puts in cookie' do
+    let(:request) { struct(query: 'y', cookie: ['y=5', 'puts 999999']) }
+    it { expect(result[0]).to eq "=> 5\n" }
+  end
+  context 'query and puts in query' do
+    let(:request) { struct(query: 'puts y', cookie: ['y=5', 'puts 999999']) }
+    it { expect(result[0]).to eq "5\n=> nil\n" }
+  end
+  context 'query and function in cookie' do
+    let(:request) { struct(query: 'x', cookie: ['def x; 5; end']) }
+    it { expect(result[0]).to eq "=> 5\n" }
+  end
+  context 'query and function in query' do
+    let(:request) { struct(query: 'def x;5;end', cookie: []) }
+    it { expect(result[0]).to eq "=> nil\n" }
+  end
+
 end
