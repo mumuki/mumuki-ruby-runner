@@ -20,8 +20,8 @@ describe 'runner' do
   end
 
 
-  pending 'prevents malicious allocation related code' do
-    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(x).to eq 3 } end',
+  it 'prevents malicious allocation related code' do
+    response = bridge.run_tests!(test: 'describe "foo" do  it { expect(l).to eq 3 } end',
                                  extra: '',
                                  expectations: [],
                                  content: <<-EOF
@@ -31,7 +31,12 @@ describe 'runner' do
 
     EOF
     )
-    expect(response).to eq(:errored)
+    expect(response).to eq(expectation_results: [],
+                           feedback: "",
+                           response_type: :unstructured,
+                           result: "Execution time limit of 4s exceeded. Is your program performing an infinite loop or recursion?",
+                           status: :aborted,
+                           test_results: [])
   end
 
 
