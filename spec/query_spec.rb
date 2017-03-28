@@ -14,6 +14,11 @@ describe RubyQueryHook do
     it { expect(result[0]).to eq "=> 5\n" }
   end
 
+  context 'query with errors' do
+    let(:request) { struct(query: 'true.unknown_message') }
+    it { expect(result[0]).to eq "=> undefined method `unknown_message' for true:TrueClass\n" }
+  end
+
   context 'query and content' do
     let(:request) { struct(query: 'x', content: 'x=2*2') }
     it { expect(result[0]).to eq "=> 4\n" }

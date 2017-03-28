@@ -35,7 +35,7 @@ ruby
     if query.start_with? 'def '
       "#{query}\nputs \"=> nil\""
     else
-      "print('=> ' + (#{query}).inspect)"
+      "begin; print('=> ' + (#{query}).inspect); rescue Exception => e; print('=> ' + e.message) end"
     end
   end
 
