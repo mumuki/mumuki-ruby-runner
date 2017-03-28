@@ -22,7 +22,7 @@ describe 'running' do
       let(:results) { runner.run!(file_failed) }
 
       it { expect(results[0]).to(
-          eq([['_true is is something that will fail', :failed, "\nexpected: 3\n     got: true\n\n(compared using ==)\n"]])) }
+          eq([['_true is something that will fail', :failed, "\nexpected: 3\n     got: true\n\n(compared using ==)\n"]])) }
     end
 
     context 'on multi file' do
@@ -31,7 +31,7 @@ describe 'running' do
       it { expect(results[0]).to(
           eq([['_true is true', :passed, ''],
               ['_true is not _false', :passed, ''],
-              ['_true is is something that will fail', :failed, "\nexpected: 3\n     got: true\n\n(compared using ==)\n"]])) }
+              ['_true is something that will fail', :failed, "\nexpected: 3\n     got: true\n\n(compared using ==)\n"]])) }
     end
   end
 end
