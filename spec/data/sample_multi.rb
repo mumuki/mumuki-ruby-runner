@@ -9,7 +9,7 @@ describe '_true' do
     expect(_true).to_not eq false
   end
 
-  it 'is is something that will fail' do
+  it 'is something that will fail' do
     expect(_true).to eq 3
   end
 end
