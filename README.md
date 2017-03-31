@@ -1,9 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/mumuki/mumuki-rspec-server.png?label=ready&title=Ready)](https://waffle.io/mumuki/mumuki-rspec-server)
-[![Build Status](https://travis-ci.org/mumuki/mumuki-rspec-server.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-rspec-server)
-[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-rspec-server/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-rspec-server)
-[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-rspec-server/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-rspec-server)
+[![Stories in Ready](https://badge.waffle.io/mumuki/mumuki-ruby-runner.png?label=ready&title=Ready)](https://waffle.io/mumuki/mumuki-ruby-runner)
+[![Build Status](https://travis-ci.org/mumuki/mumuki-ruby-runner.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-ruby-runner)
+[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-ruby-runner/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-ruby-runner)
+[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-ruby-runner/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-ruby-runner)
 
-> mumuki-rspec-server
+> mumuki-ruby-runner
 
 # Run the server
 
