@@ -16,7 +16,8 @@ describe RubyQueryHook do
 
   context 'query with errors' do
     let(:request) { struct(query: 'true.unknown_message') }
-    it { expect(result[0]).to eq "=> undefined method `unknown_message' for true:TrueClass\n" }
+    it { expect(result[0]).to eq "undefined method `unknown_message' for true:TrueClass (NoMethodError)\n" }
+    it { expect(result[1]).to eq :failed }
   end
 
   context 'query and content' do

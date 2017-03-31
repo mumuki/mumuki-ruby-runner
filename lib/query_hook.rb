@@ -31,11 +31,19 @@ ruby
     "ruby #{filename}"
   end
 
+  def post_process_file(_file, result, status)
+    if status == :failed && error_output?(result)
+      [sanitize_error_output(result), status]
+    else
+      super
+    end
+  end
+
   def compile_query(query)
     if query.start_with? 'def '
       "#{query}\nputs \"=> nil\""
     else
-      "begin; print('=> ' + (#{query}).inspect); rescue Exception => e; print('=> ' + e.message) end"
+      "print('=> ' + (#{query}).inspect)"
     end
   end
 
@@ -54,4 +62,11 @@ ruby
     build_state(cookie).join("\n")
   end
 
+  def error_output?(result)
+    /\.rb:(\d)+:in `<main>': / =~ result
+  end
+
+  def sanitize_error_output(result)
+    result.split("<main>': ").second
+  end
 end
