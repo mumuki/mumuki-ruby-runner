@@ -74,6 +74,6 @@ ruby
     # Matches lines like:
     # * from /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `<main>'
     # * /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `respond_to?':
-    /(from )?(.)+\.rb:(\d)+:in `([\w|<|>|?|!]+)'(:)?/
+    /(from )?(.)+\.rb:(\d)+:in `([\w|<|>|?|!|+|*|-|\/|=]+)'(:)?/
   end
 end
