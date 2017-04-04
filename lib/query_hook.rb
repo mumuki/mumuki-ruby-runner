@@ -63,10 +63,14 @@ ruby
   end
 
   def error_output?(result)
-    /\.rb:(\d)+:in `<main>': / =~ result
+    error_regexp =~ result
   end
 
   def sanitize_error_output(result)
-    result.split("<main>': ").second
+    result.gsub(error_regexp, '').strip
+  end
+
+  def error_regexp
+    /(from )?(.)+\.rb:(\d)+:in `([\w|<|>]+)'(: )?/
   end
 end
