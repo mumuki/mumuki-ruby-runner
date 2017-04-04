@@ -14,9 +14,15 @@ describe RubyQueryHook do
     it { expect(result[0]).to eq "=> 5\n" }
   end
 
-  context 'query with errors' do
-    let(:request) { struct(query: 'true.unknown_message') }
-    it { expect(result[0]).to eq "undefined method `unknown_message' for true:TrueClass (NoMethodError)\n" }
+  context 'query with one line error output' do
+    let(:request) { struct(query: 'true.unknown_message?') }
+    it { expect(result[0]).to eq "undefined method `unknown_message?' for true:TrueClass (NoMethodError)" }
+    it { expect(result[1]).to eq :failed }
+  end
+
+  context 'query with multiline error output' do
+    let(:request) { struct(query: 'true.inspect("invalid argument")') }
+    it { expect(result[0]).to eq 'wrong number of arguments (1 for 0) (ArgumentError)' }
     it { expect(result[1]).to eq :failed }
   end
 
