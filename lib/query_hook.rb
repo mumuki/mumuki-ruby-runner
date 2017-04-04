@@ -71,6 +71,9 @@ ruby
   end
 
   def error_regexp
-    /(from )?(.)+\.rb:(\d)+:in `([\w|<|>]+)'(: )?/
+    # Matches lines like:
+    # * from /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `<main>'
+    # * /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `respond_to?':
+    /(from )?(.)+\.rb:(\d)+:in `([\w|<|>|?|!]+)'(:)?/
   end
 end
