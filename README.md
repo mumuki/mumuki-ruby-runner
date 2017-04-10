@@ -5,6 +5,13 @@
 
 > mumuki-ruby-runner
 
+# Install the server
+
+```
+docker pull mumuki/mumuki-rspec-worker
+bundle install
+```
+
 # Run the server
 
 ```
