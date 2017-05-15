@@ -10,7 +10,7 @@ class RubyMetadataHook < Mumukit::Hook
      test_framework: {
          name: 'rspec',
          version: '2.13',
-         test_extension: '.rb'
+         test_extension: 'rb'
      }}
   end
 end
