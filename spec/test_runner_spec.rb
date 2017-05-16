@@ -7,6 +7,22 @@ describe 'running' do
   let(:file_multi) { File.new('spec/data/sample_multi.rb') }
   let(:file_failed) { File.new('spec/data/sample_failed.rb') }
 
+  describe '#compile_file_content' do
+    let(:test) { %q{
+y = 25
+#...content...#
+expect(x).to eq 35 } }
+    let(:expected) { %q{
+x = y + 10
+
+y = 25
+x = y + 10
+expect(x).to eq 35 } }
+    let(:request) { OpenStruct.new(content: 'x = y + 10', extra: '', test: test) }
+
+    it { expect(runner.compile_file_content request).to eq expected }
+  end
+
   describe '#run_test_command' do
     it { expect(runner.command_line(file.path)).to include('rspec spec/data/sample.rb') }
   end
