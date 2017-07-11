@@ -13,20 +13,31 @@ describe RubyExpectationsHook do
   let(:result) { compile_and_run(req(expectations, code)) }
 
   context 'smells' do
-    let(:code) { 'x = 4' }
+    let(:code) { 'module X; end' }
     let(:expectations) { [] }
 
-    it { expect(result).to eq [{binding: 'x', inspection: 'HasTooShortBindings'}] }
+    it { expect(result).to eq [{binding: 'X', inspection: 'HasTooShortBindings'}] }
   end
 
 
   context 'expectations' do
-    let(:code) { 'pepita = Object.new' }
-    let(:declares_foo) { {binding: '', inspection: 'DeclaresVariable:foo'} }
-    let(:declares_pepita) { {binding: '', inspection: 'DeclaresVariable:pepita'} }
-    let(:expectations) { [declares_foo, declares_pepita] }
+    describe 'declaresObject' do
+      let(:code) { 'module Pepita; end' }
+      let(:declares_foo) { {binding: '', inspection: 'DeclaresObject:Foo'} }
+      let(:declares_pepita) { {binding: '', inspection: 'DeclaresObject:Pepita'} }
+      let(:expectations) { [declares_foo, declares_pepita] }
 
-    it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
+      it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
+    end
+
+    describe 'assigns' do
+      let(:code) { 'pepita = Object.new' }
+      let(:assigns_foo) { {binding: '', inspection: 'Assigns:foo'} }
+      let(:assigns_pepita) { {binding: '', inspection: 'Assigns:pepita'} }
+      let(:expectations) { [assigns_foo, assigns_pepita] }
+
+      it { expect(result).to eq [{expectation: assigns_foo, result: false}, {expectation: assigns_pepita, result: true}] }
+    end
   end
 
 end
