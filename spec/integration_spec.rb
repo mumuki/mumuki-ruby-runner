@@ -26,7 +26,7 @@ describe 'runner' do
                                  expectations: [])
 
     expect(response[:status]).to eq(:passed)
-    expect(response[:result]).to eq "=> 5\n"
+    expect(response[:result].strip).to eq "=> 5"
   end
 
 
