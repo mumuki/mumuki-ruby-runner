@@ -53,6 +53,28 @@ describe RubyExpectationsHook do
           {expectation: pepita_declares_vola, result: false}] }
     end
 
+    describe 'UsesLambda' do
+      let(:code) { '[4].map {|it| it + 1}' }
+      let(:uses_lambda) { {binding: '', inspection: 'UsesLambda'} }
+      let(:expectations) { [uses_lambda] }
+
+      it { expect(result).to eq [{expectation: uses_lambda, result: true}] }
+    end
+
+    describe 'Uses' do
+      let(:code) { '
+        class Foo; def m; end; end;
+        class Bar; def m; self.g; end; end' }
+      let(:foo_delegates) { {binding: 'Foo', inspection: 'Uses:*'} }
+      let(:foo_m_delegates) { {binding: 'Intransitive:Foo.m', inspection: 'Uses:*'} }
+      let(:bar_m_delegates) { {binding: 'Intransitive:Bar.m', inspection: 'Uses:*'} }
+      let(:expectations) { [foo_delegates, foo_m_delegates, bar_m_delegates, {binding: '', inspection: 'Except:HasTooShortBindings'}] }
+
+      it { expect(result).to eq [{expectation: foo_delegates, result: false},
+                                 {expectation: foo_m_delegates, result: false},
+                                 {expectation: bar_m_delegates, result: true}] }
+    end
+
     describe 'Assigns' do
       let(:code) { 'pepita = Object.new' }
       let(:assigns_foo) { {binding: '', inspection: 'Assigns:foo'} }
