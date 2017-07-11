@@ -1,6 +1,7 @@
 require 'mulang/ruby'
 
 class RubyExpectationsHook < Mumukit::Templates::MulangExpectationsHook
+  include_smells true
 
   def language
     'Mulang'
