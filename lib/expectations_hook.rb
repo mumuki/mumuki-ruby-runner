@@ -13,4 +13,7 @@ class RubyExpectationsHook < Mumukit::Templates::MulangExpectationsHook
     raise Mumukit::CompilationError, e
   end
 
+  def default_smell_exceptions
+    %w(UsesCut UsesFail UsesUnificationOperator HasRedundantReduction HasRedundantParameter)
+  end
 end
