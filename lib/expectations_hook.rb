@@ -14,6 +14,6 @@ class RubyExpectationsHook < Mumukit::Templates::MulangExpectationsHook
   end
 
   def default_smell_exceptions
-    %w(UsesCut UsesFail UsesUnificationOperator HasRedundantReduction HasRedundantParameter)
+    LOGIC_SMELLS + FUNCTIONAL_SMELLS + %w(HasWrongCaseBindings)
   end
 end
