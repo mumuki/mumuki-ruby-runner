@@ -43,7 +43,7 @@ ruby
     if query.start_with? 'def '
       "#{query}\nputs \"=> nil\""
     else
-      "print('=> ' + (#{query}).inspect)"
+      "puts('=> ' + (#{query}).inspect)"
     end
   end
 
