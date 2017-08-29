@@ -1,14 +1,16 @@
 class RubyTestHook < Mumukit::Templates::FileHook
-  mashup do |fields| 
-    fields[2] = <<RUBY
+  mashup do |extra, content, test|
+    [extra, 
+    content,
+<<RUBY
 describe do
   after(:all) do
     puts '!!!MUMUKI-RUBY-OUTPUT!!!'
   end
-  #{fields[2]}
+  #{test}
 end
 RUBY
-    fields
+    ]
   end
   isolated true
   structured true, separator: '!!!MUMUKI-RUBY-OUTPUT!!!'
