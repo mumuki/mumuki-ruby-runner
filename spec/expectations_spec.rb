@@ -16,14 +16,14 @@ describe RubyExpectationsHook do
     let(:code) { 'module X; end' }
     let(:expectations) { [] }
 
-    it { expect(result).to eq [{expectation: {binding: 'X', inspection: 'HasTooShortBindings'}, result: false}] }
+    it { expect(result).to eq [{expectation: {binding: 'X', inspection: 'HasTooShortIdentifiers'}, result: false}] }
   end
 
   context 'expectations' do
     describe 'DeclaresObject' do
       let(:code) { 'module Pepita; end' }
-      let(:declares_foo) { {binding: '', inspection: 'DeclaresObject:Foo'} }
-      let(:declares_pepita) { {binding: '', inspection: 'DeclaresObject:Pepita'} }
+      let(:declares_foo) { {binding: '*', inspection: 'DeclaresObject:Foo'} }
+      let(:declares_pepita) { {binding: '*', inspection: 'DeclaresObject:Pepita'} }
       let(:expectations) { [declares_foo, declares_pepita] }
 
       it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
@@ -31,8 +31,8 @@ describe RubyExpectationsHook do
 
     describe 'DeclaresClass' do
       let(:code) { 'class Pepita; end' }
-      let(:declares_foo) { {binding: '', inspection: 'DeclaresClass:Foo'} }
-      let(:declares_pepita) { {binding: '', inspection: 'DeclaresClass:Pepita'} }
+      let(:declares_foo) { {binding: '*', inspection: 'DeclaresClass:Foo'} }
+      let(:declares_pepita) { {binding: '*', inspection: 'DeclaresClass:Pepita'} }
       let(:expectations) { [declares_foo, declares_pepita] }
 
       it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
@@ -40,8 +40,8 @@ describe RubyExpectationsHook do
 
     describe 'DeclaresMethod' do
       let(:code) { 'class Pepita; def canta; end; end' }
-      let(:declares_methods) { {binding: '', inspection: 'DeclaresMethod'} }
-      let(:declares_canta) { {binding: '', inspection: 'DeclaresMethod:canta'} }
+      let(:declares_methods) { {binding: '*', inspection: 'DeclaresMethod'} }
+      let(:declares_canta) { {binding: '*', inspection: 'DeclaresMethod:canta'} }
       let(:pepita_declares_canta) { {binding: 'Pepita', inspection: 'DeclaresMethod:canta'} }
       let(:pepita_declares_vola) { {binding: 'Pepita', inspection: 'DeclaresMethod:vola'} }
       let(:expectations) { [declares_methods, declares_canta, pepita_declares_canta, pepita_declares_vola] }
@@ -55,7 +55,7 @@ describe RubyExpectationsHook do
 
     describe 'UsesLambda' do
       let(:code) { '[4].map {|it| it + 1}' }
-      let(:uses_lambda) { {binding: '', inspection: 'UsesLambda'} }
+      let(:uses_lambda) { {binding: '*', inspection: 'UsesLambda'} }
       let(:expectations) { [uses_lambda] }
 
       it { expect(result).to eq [{expectation: uses_lambda, result: true}] }
@@ -68,7 +68,7 @@ describe RubyExpectationsHook do
       let(:foo_delegates) { {binding: 'Foo', inspection: 'Uses:*'} }
       let(:foo_m_delegates) { {binding: 'Intransitive:Foo.m', inspection: 'Uses:*'} }
       let(:bar_m_delegates) { {binding: 'Intransitive:Bar.m', inspection: 'Uses:*'} }
-      let(:expectations) { [foo_delegates, foo_m_delegates, bar_m_delegates, {binding: '', inspection: 'Except:HasTooShortBindings'}] }
+      let(:expectations) { [foo_delegates, foo_m_delegates, bar_m_delegates, {binding: '*', inspection: 'Except:HasTooShortIdentifiers'}] }
 
       it { expect(result).to eq [{expectation: foo_delegates, result: false},
                                  {expectation: foo_m_delegates, result: false},
@@ -77,8 +77,8 @@ describe RubyExpectationsHook do
 
     describe 'Assigns' do
       let(:code) { 'pepita = Object.new' }
-      let(:assigns_foo) { {binding: '', inspection: 'Assigns:foo'} }
-      let(:assigns_pepita) { {binding: '', inspection: 'Assigns:pepita'} }
+      let(:assigns_foo) { {binding: '*', inspection: 'Assigns:foo'} }
+      let(:assigns_pepita) { {binding: '*', inspection: 'Assigns:pepita'} }
       let(:expectations) { [assigns_foo, assigns_pepita] }
 
       it { expect(result).to eq [{expectation: assigns_foo, result: false}, {expectation: assigns_pepita, result: true}] }
