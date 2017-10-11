@@ -38,6 +38,23 @@ describe RubyExpectationsHook do
       it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
     end
 
+    describe 'UsesInheritance' do
+      context 'when uses' do
+        let(:code) { 'class Pepita < Bird; end' }
+        let(:uses_inheritance) { {binding: 'Pepita', inspection: 'UsesInheritance'} }
+        let(:expectations) { [uses_inheritance] }
+
+        it { expect(result).to eq [{expectation: uses_inheritance, result: true}] }
+      end
+      context 'when not uses' do
+        let(:code) { 'class Pepita; end' }
+        let(:uses_inheritance) { {binding: 'Pepita', inspection: 'UsesInheritance'} }
+        let(:expectations) { [uses_inheritance] }
+
+        it { expect(result).to eq [{expectation: uses_inheritance, result: false}] }
+      end
+    end
+
     describe 'DeclaresMethod' do
       let(:code) { 'class Pepita; def canta; end; end' }
       let(:declares_methods) { {binding: '*', inspection: 'DeclaresMethod'} }
