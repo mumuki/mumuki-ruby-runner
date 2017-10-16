@@ -12,11 +12,21 @@ describe RubyExpectationsHook do
   let(:runner) { RubyExpectationsHook.new(mulang_path: './bin/mulang') }
   let(:result) { compile_and_run(req(expectations, code)) }
 
-  context 'smells' do
-    let(:code) { 'module X; end' }
-    let(:expectations) { [] }
+  describe 'smells' do
+    context 'with wrong case identifiers' do
+      let(:code) { 'module  Xy; def fooBar; end; end' }
+      let(:expectations) { [] }
 
-    it { expect(result).to eq [{expectation: {binding: 'X', inspection: 'HasTooShortIdentifiers'}, result: false}] }
+      it { expect(result).to eq [{expectation: {binding: 'Xy', inspection: 'HasTooShortIdentifiers'}, result: false},
+                                 {expectation: {binding: 'Xy', inspection: 'HasWrongCaseIdentifiers'}, result: false},
+                                 {expectation: {binding: 'fooBar', inspection: 'HasWrongCaseIdentifiers'}, result: false}] }
+    end
+    context 'no domain language smells' do
+      let(:code) { 'module FooBar; def foo_bar; end; end' }
+      let(:expectations) { [] }
+
+      it { expect(result).to eq [] }
+    end
   end
 
   context 'expectations' do
