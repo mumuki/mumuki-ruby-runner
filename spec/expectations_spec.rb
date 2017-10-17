@@ -14,12 +14,38 @@ describe RubyExpectationsHook do
 
   describe 'smells' do
     context 'with wrong case identifiers' do
-      let(:code) { 'module  Xy; def fooBar; end; end' }
+      let(:code) { <<-RUBY
+        module  Foo_Bar
+          def fooBar
+          end
+          def y
+          end
+          def aB
+          end
+        end
+        module  Foo
+        end
+      RUBY
+     }
+
       let(:expectations) { [] }
 
-      it { expect(result).to eq [{expectation: {binding: 'Xy', inspection: 'HasTooShortIdentifiers'}, result: false},
-                                 {expectation: {binding: 'Xy', inspection: 'HasWrongCaseIdentifiers'}, result: false},
-                                 {expectation: {binding: 'fooBar', inspection: 'HasWrongCaseIdentifiers'}, result: false}] }
+      it { expect(result).to include expectation: {binding: 'Foo_Bar', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'Foo_Bar', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to include expectation: {binding: 'fooBar', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'fooBar', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to_not include expectation: {binding: 'y', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to include expectation: {binding: 'y', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to include expectation: {binding: 'aB', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to include expectation: {binding: 'aB', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to_not include expectation: {binding: 'Foo', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'Foo', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result.size).to eq 5 }
     end
     context 'no domain language smells' do
       let(:code) { 'module FooBar; def foo_bar; end; end' }
