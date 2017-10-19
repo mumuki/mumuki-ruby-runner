@@ -12,11 +12,47 @@ describe RubyExpectationsHook do
   let(:runner) { RubyExpectationsHook.new(mulang_path: './bin/mulang') }
   let(:result) { compile_and_run(req(expectations, code)) }
 
-  context 'smells' do
-    let(:code) { 'module X; end' }
-    let(:expectations) { [] }
+  describe 'smells' do
+    context 'with wrong case identifiers' do
+      let(:code) { <<-RUBY
+        module  Foo_Bar
+          def fooBar
+          end
+          def y
+          end
+          def aB
+          end
+        end
+        module  Foo
+        end
+      RUBY
+     }
 
-    it { expect(result).to eq [{expectation: {binding: 'X', inspection: 'HasTooShortIdentifiers'}, result: false}] }
+      let(:expectations) { [] }
+
+      it { expect(result).to include expectation: {binding: 'Foo_Bar', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'Foo_Bar', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to include expectation: {binding: 'fooBar', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'fooBar', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to_not include expectation: {binding: 'y', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to include expectation: {binding: 'y', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to include expectation: {binding: 'aB', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to include expectation: {binding: 'aB', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result).to_not include expectation: {binding: 'Foo', inspection: 'HasWrongCaseIdentifiers'}, result: false }
+      it { expect(result).to_not include expectation: {binding: 'Foo', inspection: 'HasTooShortIdentifiers'}, result: false }
+
+      it { expect(result.size).to eq 5 }
+    end
+    context 'no domain language smells' do
+      let(:code) { 'module FooBar; def foo_bar; end; end' }
+      let(:expectations) { [] }
+
+      it { expect(result).to eq [] }
+    end
   end
 
   context 'expectations' do
