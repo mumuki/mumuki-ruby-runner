@@ -8,7 +8,7 @@
 # Install the server
 
 ```
-docker pull mumuki/mumuki-rspec-worker
+docker pull mumuki/mumuki-rspec-worker:2.0
 bundle install
 ```
 
