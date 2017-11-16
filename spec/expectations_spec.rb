@@ -9,7 +9,7 @@ describe RubyExpectationsHook do
     runner.run!(runner.compile(request))
   end
 
-  let(:runner) { RubyExpectationsHook.new(mulang_path: './bin/mulang') }
+  let(:runner) { RubyExpectationsHook.new }
   let(:result) { compile_and_run(req(expectations, code)) }
 
   describe 'smells' do
