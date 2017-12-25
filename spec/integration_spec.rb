@@ -74,6 +74,29 @@ describe 'runner' do
   end
 
 
+  it 'does not complay about methods with special characters' do
+    response = bridge.run_tests!(test: 'describe "1 is 1" do  it { expect(1).to eq 1 } end',
+                                 extra: '',
+                                 content: %q{
+                                        class Stack
+                                          def push!(value)
+                                          end
+                                          def empty?
+                                          end
+                                          def elements_count
+                                          end
+                                        end},
+                                 expectations: [])
+
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{title: '1 is 1 should eq 1', status: :passed, result: ''}],
+                           status: :passed,
+                           feedback: '',
+                           expectation_results: [],
+                           result: '')
+  end
+
+
   it 'prevents malicious allocation related code' do
     response = bridge.run_tests!(test: 'describe "foo" do  it { expect(l).to eq 3 } end',
                                  extra: '',
