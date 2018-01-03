@@ -74,7 +74,7 @@ describe 'runner' do
   end
 
 
-  it 'does not complay about methods with special characters' do
+  it 'does not complain about methods with special characters' do
     response = bridge.run_tests!(test: 'describe "1 is 1" do  it { expect(1).to eq 1 } end',
                                  extra: '',
                                  content: %q{
