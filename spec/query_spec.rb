@@ -22,7 +22,7 @@ describe RubyQueryHook do
 
   context 'query with multiline error output' do
     let(:request) { struct(query: 'true.inspect("invalid argument")') }
-    it { expect(result[0]).to eq 'wrong number of arguments (1 for 0) (ArgumentError)' }
+    it { expect(result[0]).to eq 'wrong number of arguments (given 1, expected 0) (ArgumentError)' }
     it { expect(result[1]).to eq :failed }
   end
 
