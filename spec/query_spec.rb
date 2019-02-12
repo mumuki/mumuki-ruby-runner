@@ -40,25 +40,40 @@ describe RubyQueryHook do
     let(:request) { struct(query: 'y + 1', cookie: ['y=64']) }
     it { expect(result[0]).to eq "=> 65\n" }
   end
+
   context 'query and failed cookie' do
     let(:request) { struct(query: 'y', cookie: ['y=5', 'raise a']) }
     it { expect(result[0]).to eq "=> 5\n" }
   end
+
   context 'query and puts in cookie' do
     let(:request) { struct(query: 'y', cookie: ['y=5', 'puts 999999']) }
     it { expect(result[0]).to eq "=> 5\n" }
   end
+
   context 'query and puts in query' do
     let(:request) { struct(query: 'puts y', cookie: ['y=5', 'puts 999999']) }
     it { expect(result[0]).to eq "5\n=> nil\n" }
   end
+
   context 'query and function in cookie' do
     let(:request) { struct(query: 'x', cookie: ['def x; 5; end']) }
     it { expect(result[0]).to eq "=> 5\n" }
   end
+
   context 'query and function in query' do
     let(:request) { struct(query: 'def x;5;end', cookie: []) }
     it { expect(result[0]).to eq "=> nil\n" }
   end
 
+  context 'query with syntax errors' do
+    let(:request) { struct(query: '!@#!@#') }
+    let(:error_message) { %q{`@#' is not allowed as an instance variable name
+syntax error, unexpected end-of-input
+    puts('=> ' + (!@#!@#).inspect)
+                    ^} }
+
+    it { expect(result[0]).to eq error_message }
+    it { expect(result[1]).to eq :errored }
+  end
 end
