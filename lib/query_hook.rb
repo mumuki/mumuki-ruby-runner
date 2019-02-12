@@ -32,8 +32,10 @@ ruby
   end
 
   def post_process_file(_file, result, status)
-    if status == :failed && error_output?(result)
-      [sanitize_error_output(result), status]
+    if status == :failed && runtime_error_output?(result)
+      [sanitize_runtime_error_output(result), status]
+    elsif status == :failed && syntax_error_output?(result)
+      [sanitize_syntax_error_output(result), :errored]
     else
       super
     end
@@ -62,18 +64,30 @@ ruby
     build_state(cookie).join("\n")
   end
 
-  def error_output?(result)
-    error_regexp =~ result
+  def runtime_error_output?(result)
+    runtime_error_regexp === result
   end
 
-  def sanitize_error_output(result)
-    result.gsub(error_regexp, '').strip
+  def syntax_error_output?(result)
+    syntax_error_regexp === result
   end
 
-  def error_regexp
+  def sanitize_runtime_error_output(result)
+    result.gsub(runtime_error_regexp, '').strip
+  end
+
+  def sanitize_syntax_error_output(result)
+    result.gsub(syntax_error_regexp, '').strip
+  end
+
+  def runtime_error_regexp
     # Matches lines like:
     # * from /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `<main>'
     # * /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `respond_to?':
     /(from )?(.)+\.rb:(\d)+:in `([\w|<|>|?|!|+|*|-|\/|=]+)'(:)?/
+  end
+
+  def syntax_error_regexp
+    /.+?\.rb:\d+: (?m)(?=.*syntax error)/
   end
 end
