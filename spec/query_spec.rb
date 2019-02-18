@@ -66,12 +66,22 @@ describe RubyQueryHook do
     it { expect(result[0]).to eq "=> nil\n" }
   end
 
-  context 'query with syntax errors' do
+  context 'query invalid name syntax error' do
     let(:request) { struct(query: '!@#!@#') }
     let(:error_message) { %q{`@#' is not allowed as an instance variable name
 syntax error, unexpected end-of-input
     puts('=> ' + (!@#!@#).inspect)
                     ^} }
+
+    it { expect(result[0]).to eq error_message }
+    it { expect(result[1]).to eq :errored }
+  end
+
+  context 'query with unclosed curly braces syntax error' do
+    let(:request) { struct(query: '[].map {') }
+    let(:error_message) { %q`syntax error, unexpected ')'
+    puts('=> ' + ([].map {).inspect)
+                           ^` }
 
     it { expect(result[0]).to eq error_message }
     it { expect(result[1]).to eq :errored }
