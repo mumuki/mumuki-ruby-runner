@@ -1,4 +1,5 @@
 class RubyQueryHook < Mumukit::Templates::FileHook
+  with_error_patterns
   isolated true
 
   def tempfile_extension
@@ -31,14 +32,11 @@ ruby
     "ruby #{filename}"
   end
 
-  def post_process_file(_file, result, status)
-    if status == :failed && runtime_error_output?(result)
-      [sanitize_runtime_error_output(result), status]
-    elsif status == :failed && syntax_error_output?(result)
-      [sanitize_syntax_error_output(result), :errored]
-    else
-      super
-    end
+  def error_patterns
+    [
+      Mumukit::ErrorPattern.new(runtime_error_regexp),
+      Mumukit::ErrorPattern::Errored.new(syntax_error_regexp)
+    ]
   end
 
   def compile_query(query)
@@ -62,22 +60,6 @@ ruby
 
   def compile_cookie(cookie)
     build_state(cookie).join("\n")
-  end
-
-  def runtime_error_output?(result)
-    runtime_error_regexp === result
-  end
-
-  def syntax_error_output?(result)
-    syntax_error_regexp === result
-  end
-
-  def sanitize_runtime_error_output(result)
-    result.gsub(runtime_error_regexp, '').strip
-  end
-
-  def sanitize_syntax_error_output(result)
-    result.gsub(syntax_error_regexp, '').strip
   end
 
   def runtime_error_regexp
