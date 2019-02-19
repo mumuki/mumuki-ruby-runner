@@ -1,4 +1,5 @@
 class RubyQueryHook < Mumukit::Templates::FileHook
+  with_error_patterns
   isolated true
 
   def tempfile_extension
@@ -31,12 +32,11 @@ ruby
     "ruby #{filename}"
   end
 
-  def post_process_file(_file, result, status)
-    if status == :failed && error_output?(result)
-      [sanitize_error_output(result), status]
-    else
-      super
-    end
+  def error_patterns
+    [
+      Mumukit::ErrorPattern::Failed.new(runtime_error_regexp),
+      Mumukit::ErrorPattern::Errored.new(syntax_error_regexp)
+    ]
   end
 
   def compile_query(query)
@@ -62,18 +62,14 @@ ruby
     build_state(cookie).join("\n")
   end
 
-  def error_output?(result)
-    error_regexp =~ result
-  end
-
-  def sanitize_error_output(result)
-    result.gsub(error_regexp, '').strip
-  end
-
-  def error_regexp
+  def runtime_error_regexp
     # Matches lines like:
     # * from /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `<main>'
     # * /tmp/mumuki.compile20170404-3221-1db8ntk.rb:17:in `respond_to?':
     /(from )?(.)+\.rb:(\d)+:in `([\w|<|>|?|!|+|*|-|\/|=]+)'(:)?/
+  end
+
+  def syntax_error_regexp
+    /.+?\.rb:\d+: (?m)(?=.*syntax error)/
   end
 end
