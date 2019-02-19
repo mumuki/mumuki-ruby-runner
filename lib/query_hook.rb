@@ -34,7 +34,7 @@ ruby
 
   def error_patterns
     [
-      Mumukit::ErrorPattern.new(runtime_error_regexp),
+      Mumukit::ErrorPattern::Failed.new(runtime_error_regexp),
       Mumukit::ErrorPattern::Errored.new(syntax_error_regexp)
     ]
   end
