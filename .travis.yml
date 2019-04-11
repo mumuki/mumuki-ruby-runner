@@ -2,7 +2,7 @@ language: ruby
 env: RACK_ENV=development
 sudo: false
 rvm:
-- 2.3.1
+- 2.6.0
 services:
 - docker
 before_install:
