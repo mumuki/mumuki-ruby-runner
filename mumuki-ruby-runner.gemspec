@@ -19,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'mumukit', '~> 2.30'
-  spec.add_dependency 'mulang-ruby', '~> 4.0'
+  spec.add_dependency 'mulang-ruby', '>= 4.0', '< 6'
 
-  spec.add_development_dependency 'bundler', '~> 1.7'
+  spec.add_development_dependency 'bundler', '>= 1.7', '< 3'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.4'
   spec.add_development_dependency 'codeclimate-test-reporter'
