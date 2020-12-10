@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: bundle install
     - name: Pull worker
-      run: docker pull mumuki/mumuki-rspec-worker:2.1
+      run: bin/pull_worker.sh
     - name: Run tests
       run: bundle exec rake
     - name: Deploy
