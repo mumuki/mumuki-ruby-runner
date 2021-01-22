@@ -74,6 +74,49 @@ describe RubyExpectationsHook do
       it { expect(result).to eq [{expectation: declares_foo, result: false}, {expectation: declares_pepita, result: true}] }
     end
 
+    describe 'UsesMath' do
+      let(:uses_math) { {binding: '*', inspection: 'UsesMath'} }
+      let(:uses_minus) { {binding: '*', inspection: 'Uses:-'} }
+      let(:uses_minus_operator) { {binding: '*', inspection: 'UsesMinus'} }
+      let(:returns_with_math) { {binding: '*', inspection: 'Returns:WithMath'} }
+
+      context 'when used in assignment' do
+        let(:code) { 'class Pepita; def fly!; @energy = energy - 10 end end' }
+        let(:expectations) { [uses_math, uses_minus, returns_with_math] }
+
+        it do
+          expect(result).to eq [
+              {expectation: uses_math, result: true},
+              {expectation: uses_minus_operator, result: true},
+              {expectation: returns_with_math, result: false} ]
+        end
+      end
+
+      context 'when used in implicit return' do
+        let(:code) { 'class Pepita; def required_energy; @energy - 50 end end' }
+        let(:expectations) { [uses_math, uses_minus, returns_with_math] }
+
+        it do
+          expect(result).to eq [
+              {expectation: uses_math, result: true},
+              {expectation: uses_minus_operator, result: true},
+              {expectation: returns_with_math, result: true} ]
+        end
+      end
+
+      context 'when used in explicit return' do
+        let(:code) { 'class Pepita; def required_energy; return @energy - 50 end end' }
+        let(:expectations) { [uses_math, uses_minus, returns_with_math] }
+
+        it do
+          expect(result).to eq [
+              {expectation: uses_math, result: true},
+              {expectation: uses_minus_operator, result: true},
+              {expectation: returns_with_math, result: true} ]
+        end
+      end
+    end
+
     describe 'UsesInheritance' do
       context 'when uses' do
         let(:code) { 'class Pepita < Bird; end' }

@@ -7,6 +7,10 @@ class RubyExpectationsHook < Mumukit::Templates::MulangExpectationsHook
     'Mulang'
   end
 
+  def original_language
+    'Ruby'
+  end
+
   def compile_content(source)
     Mulang::Ruby.parse(source)
   rescue => e
