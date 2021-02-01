@@ -117,6 +117,50 @@ describe RubyExpectationsHook do
       end
     end
 
+    describe 'UsesSize' do
+      let(:uses_size) { {binding: '*', inspection: 'Uses:size'} }
+      let(:uses_length) { {binding: '*', inspection: 'Uses:length'} }
+      let(:uses_size_operator) { {binding: '*', inspection: 'UsesSize'} }
+      let(:expectations) { [uses_size, uses_length, uses_size] }
+
+      context 'when uses size' do
+        let(:code) { '[].size' }
+
+        it do
+          expect(result).to eq [
+            {expectation: uses_size_operator, result: true},
+            {expectation: uses_size_operator, result: true},
+            {expectation: uses_size_operator, result: true}
+          ]
+        end
+      end
+
+      context 'when uses length' do
+        let(:code) { '[].length' }
+
+        it do
+          expect(result).to eq [
+            {expectation: uses_size_operator, result: true},
+            {expectation: uses_size_operator, result: true},
+            {expectation: uses_size_operator, result: true}
+          ]
+        end
+      end
+
+      context 'when neither length nor size is used' do
+        let(:code) { '[].compact' }
+
+        it do
+          expect(result).to eq [
+            {expectation: uses_size_operator, result: false},
+            {expectation: uses_size_operator, result: false},
+            {expectation: uses_size_operator, result: false}
+          ]
+        end
+      end
+    end
+
+
     describe 'UsesInheritance' do
       context 'when uses' do
         let(:code) { 'class Pepita < Bird; end' }
