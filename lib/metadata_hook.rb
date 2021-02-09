@@ -3,7 +3,7 @@ class RubyMetadataHook < Mumukit::Hook
     {language: {
         name: 'ruby',
         icon: {type: 'devicon', name: 'ruby'},
-        version: '2.0',
+        version: '2.6',
         extension: 'rb',
         ace_mode: 'ruby'
     },
