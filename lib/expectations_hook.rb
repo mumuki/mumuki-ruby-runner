@@ -12,7 +12,7 @@ class RubyExpectationsHook < Mumukit::Templates::MulangExpectationsHook
   end
 
   def compile_content(source)
-    Mulang::Ruby.parse(source)
+    Mulang::Ruby.parse(source, parser_class: Parser::Ruby26)
   rescue => e
     raise Mumukit::CompilationError, e
   end
