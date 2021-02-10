@@ -47,6 +47,82 @@ describe RubyExpectationsHook do
 
       it { expect(result.size).to eq 5 }
     end
+
+    describe 'if smells' do
+      let(:expectations) { [] }
+
+      describe 'HasEmptyIfBranches' do
+        let(:code) do
+          %q{
+            module FooBar
+              def self.do_foo
+                if some_condition
+                end
+              end
+            end
+          }
+        end
+
+        it { expect(result).to include expectation: {binding: "do_foo", inspection: "HasEmptyIfBranches"}, result: false }
+      end
+
+      describe 'HasEqualIfBranches' do
+        let(:code) do
+          %q{
+            module FooBar
+              def self.do_foo
+                if some_condition
+                  do_it!
+                else
+                  do_it!
+                end
+              end
+            end
+          }
+        end
+
+        it { expect(result).to include expectation: {binding: "do_foo", inspection: "HasEqualIfBranches"}, result: false }
+      end
+
+
+      describe 'HasRedundantIf' do
+        let(:code) do
+          %q{
+            module FooBar
+              def self.do_foo
+                if some_condition
+                  true
+                else
+                  false
+                end
+              end
+            end
+          }
+        end
+
+        it { expect(result).to include expectation: {binding: "do_foo", inspection: "HasRedundantIf"}, result: false }
+      end
+
+
+      describe 'ShouldInvertIfCondition' do
+        let(:code) do
+          %q{
+            module FooBar
+              def self.do_foo
+                if some_condition
+                else
+                  do_it!
+                end
+              end
+            end
+          }
+        end
+
+        it { expect(result).to include expectation: {binding: "do_foo", inspection: "ShouldInvertIfCondition"}, result: false }
+      end
+
+    end
+
     context 'no domain language smells' do
       let(:code) { 'module FooBar; def foo_bar; end; end' }
       let(:expectations) { [] }
