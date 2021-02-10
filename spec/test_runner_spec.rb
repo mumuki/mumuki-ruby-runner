@@ -29,6 +29,20 @@ RUBY
       it { expect(results).to eq([['_true is true', :passed, '']]) }
     end
 
+    context 'on simple passed file with sets' do
+      let(:test) do
+        <<RUBY
+describe 'empty set' do
+  it 'is empty set' do
+    expect(Set.new).to eq Set.new
+  end
+end
+RUBY
+      end
+
+      it { expect(results).to eq([['empty set is empty set', :passed, '']]) }
+    end
+
     context 'on simple failed file' do
       let(:test) do 
         <<RUBY

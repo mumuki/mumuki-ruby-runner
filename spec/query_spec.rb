@@ -14,6 +14,11 @@ describe RubyQueryHook do
     it { expect(result[0]).to eq "=> 5\n" }
   end
 
+  context 'just with set' do
+    let(:request) { struct(query: 'Set.new') }
+    it { expect(result[0]).to eq "=> #<Set: {}>\n" }
+  end
+
   context 'query with one line error output' do
     let(:request) { struct(query: 'true.unknown_message?') }
     it { expect(result[0]).to eq "undefined method `unknown_message?' for true:TrueClass (NoMethodError)" }

@@ -8,6 +8,7 @@ class RubyQueryHook < Mumukit::Templates::FileHook
 
   def compile_file_content(r)
     <<ruby
+    require 'set'
     class MumukiConsole
       def self.write(string)
       end
