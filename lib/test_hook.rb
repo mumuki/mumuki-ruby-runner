@@ -30,7 +30,7 @@ RUBY
     if status.errored?
       [
         result
-          .gsub(/^.*(solution.rb:\d+:)/) { $1 }
+          .gsub(/^.*(#{masked_tempfile_path}:\d+:)/) { $1 }
           .lines
           .reject { |it| it.start_with? "	from /usr/local" }
           .take(3)

@@ -59,20 +59,20 @@ RUBY
     end
 
     context 'on simple errored file' do
+      let(:test) do
+        <<RUBY
+describe '_true' do
+it 'is something that will fail' do
+  expect(_true).to eq 3
+end
+end
+RUBY
+      end
+
       context 'class token error' do
         let(:content) do
-          %q{
-            clss Foo
-            end
-          }
-        end
-
-        let(:test) do
-          <<RUBY
-describe '_true' do
-  it 'is something that will fail' do
-    expect(_true).to eq 3
-  end
+<<RUBY
+cls Foo
 end
 RUBY
         end
@@ -80,8 +80,6 @@ RUBY
         it { expect(results).to(eq(
           <<EOF
 solution.rb:2: syntax error, unexpected end, expecting end-of-input (SyntaxError)
-            end
-            ^~~
 
 EOF
         )) }
@@ -89,18 +87,8 @@ EOF
 
       context 'class name error' do
         let(:content) do
-          %q{
-            class foo
-            end
-          }
-        end
-
-        let(:test) do
-          <<RUBY
-describe '_true' do
-  it 'is something that will fail' do
-    expect(_true).to eq 3
-  end
+<<RUBY
+class foo
 end
 RUBY
         end
@@ -108,8 +96,8 @@ RUBY
         it { expect(results).to(eq(
           <<EOF
 solution.rb:1: class/module name must be CONSTANT (SyntaxError)
-            class foo
-                  ^~~
+class foo
+      ^~~
 
 EOF
         )) }
@@ -118,24 +106,14 @@ EOF
 
       context 'def error' do
         let(:content) do
-          %q{
-            class Foo
-              def foo
-                @m
-                  6
-                else
-                  5
-                end
-              end
-            end
-          }
-        end
-
-        let(:test) do
-          <<RUBY
-describe '_true' do
-  it 'is something that will fail' do
-    expect(_true).to eq 3
+<<RUBY
+class Foo
+  def foo
+    @m
+      6
+    else
+      5
+    end
   end
 end
 RUBY
@@ -144,8 +122,41 @@ RUBY
         it { expect(results).to(eq(
           <<EOF
 solution.rb:5: else without rescue is useless (SyntaxError)
-                else
-                ^~~~
+    else
+    ^~~~
+
+EOF
+        )) }
+      end
+
+      context 'def error with test and extra offset' do
+        let(:content) do
+<<RUBY
+class Foo
+  def foo
+    @m
+      6
+    else
+      5
+    end
+  end
+end
+RUBY
+        end
+
+        let(:extra) do
+<<RUBY
+# a comment
+# another comment
+# something else
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:5: else without rescue is useless (SyntaxError)
+    else
+    ^~~~
 
 EOF
         )) }
@@ -153,25 +164,23 @@ EOF
 
       context 'missing end' do
         let(:content) do
-          %q{
-            class Foo
-              def foo
-                if @m
-                  6
-                else
-                  5
+<<RUBY
+class Foo
+  def foo
+    if @m
+      6
+    else
+      5
 
-              end
-            end
-          }
+  end
+end
+RUBY
         end
 
         let(:test) do
           <<RUBY
 describe '_true' do
   it 'is something that will fail' do
-
-
     expect(_true).to eq 3
   end
 end
@@ -180,7 +189,7 @@ RUBY
 
         it { expect(results).to(eq(
           <<EOF
-solution.rb:23: syntax error, unexpected end-of-input, expecting end (SyntaxError)
+solution.rb:21: syntax error, unexpected end-of-input, expecting end (SyntaxError)
 
 EOF
         )) }
