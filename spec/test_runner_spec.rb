@@ -16,7 +16,7 @@ describe 'running' do
 
   describe '#run!' do
     context 'on simple passed file' do
-      let(:test) do 
+      let(:test) do
         <<RUBY
 describe '_true' do
   it 'is true' do
@@ -44,7 +44,7 @@ RUBY
     end
 
     context 'on simple failed file' do
-      let(:test) do 
+      let(:test) do
         <<RUBY
 describe '_true' do
   it 'is something that will fail' do
@@ -58,8 +58,146 @@ RUBY
           eq([['_true is something that will fail', :failed, "\nexpected: 3\n     got: true\n\n(compared using ==)\n"]])) }
     end
 
+    context 'on simple errored file' do
+      let(:test) do
+        <<RUBY
+describe '_true' do
+it 'is something that will fail' do
+  expect(_true).to eq 3
+end
+end
+RUBY
+      end
+
+      context 'class token error' do
+        let(:content) do
+<<RUBY
+cls Foo
+end
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:2: syntax error, unexpected end, expecting end-of-input (SyntaxError)
+
+EOF
+        )) }
+      end
+
+      context 'class name error' do
+        let(:content) do
+<<RUBY
+class foo
+end
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:1: class/module name must be CONSTANT (SyntaxError)
+class foo
+      ^~~
+
+EOF
+        )) }
+      end
+
+
+      context 'def error' do
+        let(:content) do
+<<RUBY
+class Foo
+  def foo
+    @m
+      6
+    else
+      5
+    end
+  end
+end
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:5: else without rescue is useless (SyntaxError)
+    else
+    ^~~~
+
+EOF
+        )) }
+      end
+
+      context 'def error with test and extra offset' do
+        let(:content) do
+<<RUBY
+class Foo
+  def foo
+    @m
+      6
+    else
+      5
+    end
+  end
+end
+RUBY
+        end
+
+        let(:extra) do
+<<RUBY
+# a comment
+# another comment
+# something else
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:5: else without rescue is useless (SyntaxError)
+    else
+    ^~~~
+
+EOF
+        )) }
+      end
+
+      context 'missing end' do
+        let(:content) do
+<<RUBY
+class Foo
+  def foo
+    if @m
+      6
+    else
+      5
+
+  end
+end
+RUBY
+        end
+
+        let(:test) do
+          <<RUBY
+describe '_true' do
+  it 'is something that will fail' do
+    expect(_true).to eq 3
+  end
+end
+RUBY
+        end
+
+        it { expect(results).to(eq(
+          <<EOF
+solution.rb:21: syntax error, unexpected end-of-input, expecting end (SyntaxError)
+
+EOF
+        )) }
+      end
+    end
+
     context 'on multi file' do
-      let(:test) do 
+      let(:test) do
         <<RUBY
 describe '_true' do
   it 'is true' do
@@ -84,7 +222,7 @@ RUBY
     end
 
     context 'on logging operation' do
-      let(:test) do 
+      let(:test) do
         <<RUBY
 describe '_true' do
   it 'is something that will fail' do

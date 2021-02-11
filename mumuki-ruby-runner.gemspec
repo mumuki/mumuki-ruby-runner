@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'mumukit', '~> 2.39'
+  spec.add_dependency 'mumukit', '~> 2.40'
   spec.add_dependency 'mulang', '>= 6.0.5'
   spec.add_dependency 'mulang-ruby', '~> 6.1'
 

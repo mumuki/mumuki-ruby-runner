@@ -1,7 +1,10 @@
 class RubyTestHook < Mumukit::Templates::FileHook
+  line_number_offset 1, include_extra: true
+
   mashup do |extra, content, test|
-    [extra, 
-    content,
+    [
+      extra,
+      content,
 <<RUBY
 describe do
   after(:all) do
@@ -21,6 +24,22 @@ RUBY
 
   def command_line(filename)
     "rspec #{filename} -f json"
+  end
+
+  def post_process_unstructured_result(file, result, status)
+    if status.errored?
+      [
+        result
+          .gsub(/^.*(#{masked_tempfile_path}:\d+:)/) { $1 }
+          .lines
+          .reject { |it| it.start_with? "	from /usr/local" }
+          .take(3)
+          .join + "\n",
+        status
+      ]
+    else
+      super
+    end
   end
 
   def to_structured_result(result)
