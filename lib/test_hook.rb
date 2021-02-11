@@ -1,9 +1,10 @@
 class RubyTestHook < Mumukit::Templates::FileHook
-  line_number_offset 2, include_extra: true
+  line_number_offset 1, include_extra: true
 
   mashup do |extra, content, test|
-    [extra,
-    content,
+    [
+      extra,
+      content,
 <<RUBY
 describe do
   after(:all) do
