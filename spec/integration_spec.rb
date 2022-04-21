@@ -29,6 +29,15 @@ describe 'runner' do
     expect(response[:result].strip).to eq "=> 5"
   end
 
+  it 'prevents executing shell commands in queries' do
+    response = bridge.run_query!(query: %q{`ls`},
+                                 extra: '',
+                                 expectations: [],
+                                 content: '')
+
+    expect(response).to eq(result: "solution.rb:18:in ``': No such file or directory - ls (Errno::ENOENT)",
+                           status: :failed)
+  end
 
   it 'supports tests with interpolations' do
     response = bridge.run_tests! content: 'a = b',
@@ -115,7 +124,6 @@ describe 'runner' do
                            status: :aborted,
                            test_results: [])
   end
-
 
   it 'answers a valid hash when submission is ok' do
     response = bridge.run_tests!(test: 'describe "foo" do  it("bar") { expect(x).to eq 3 } end',
