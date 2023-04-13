@@ -12,8 +12,8 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.7
-        bundler: 2.1.4
+        ruby-version: 3.1.3
+        bundler: 2.4.7
         bundler-cache: true
     - name: Pull worker
       run: bin/pull_worker.sh
@@ -30,4 +30,3 @@ jobs:
         gem push *.gem
       env:
         GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_AUTH_TOKEN}}"
-
